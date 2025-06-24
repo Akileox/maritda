@@ -6,7 +6,7 @@ const Footer = () => {
   return (
     <footer className="w-full flex flex-col sm:flex-row items-center justify-between gap-2 px-4 py-6 border-t border-gray-100 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-gray-500 dark:text-gray-400 text-sm transition-colors">
       <div>
-        © {new Date().getFullYear()} Maritda. {lang === 'ko' ? '모든 권리 보유.' : 'All rights reserved.'}
+        © {new Date().getFullYear()} Maritda. All rights reserved.
       </div>
       <div className="flex items-center gap-4">
         <a href="https://github.com/Akileox" target="_blank" rel="noopener noreferrer" aria-label="Github" className="hover:text-gray-900 dark:hover:text-white transition-colors flex items-center gap-1">
