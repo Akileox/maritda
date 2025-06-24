@@ -10,8 +10,18 @@ app = FastAPI(
 
 # CORS 설정
 origins = [
-    "http://localhost:5173", # 프론트엔드 개발 서버 주소
-    "http://localhost:5174", # 포트 변경 시
+    # 개발 환경 (Vite, CRA, 기타)
+    "http://localhost",
+    "http://localhost:5173",
+    "http://localhost:3000",
+    "http://localhost:8080",
+    "http://127.0.0.1",
+    "http://127.0.0.1:5173",
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:8080",
+    # 배포 환경 (예시)
+    # "https://maritda-app.vercel.app",
+    # "https://your-custom-domain.com",
 ]
 
 app.add_middleware(
