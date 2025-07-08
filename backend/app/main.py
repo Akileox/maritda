@@ -19,6 +19,7 @@ origins = [
     "http://127.0.0.1:5173",
     "http://127.0.0.1:3000",
     "http://127.0.0.1:8080",
+    "http://127.0.0.1:5176",
     # 배포 환경 (예시)
     # "https://maritda-app.vercel.app",
     # "https://your-custom-domain.com",
