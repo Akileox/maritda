@@ -2,6 +2,7 @@ import MainContent from '../components/MainContent';
 import { ArrowRightIcon } from '@heroicons/react/24/solid';
 import { useContext } from 'react';
 import { LanguageContext } from '../App';
+import { Link } from 'react-router-dom';
 
 const HomePage = () => {
   const { lang } = useContext(LanguageContext);
@@ -21,13 +22,13 @@ const HomePage = () => {
         <p className="text-xl sm:text-2xl text-center text-gray-700 dark:text-gray-200 max-w-2xl font-medium">
           {subtext}
         </p>
-        <a
-          href="/editor"
+        <Link
+          to="/editor"
           className="mt-2 px-8 py-4 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-500 dark:to-indigo-700 shadow-lg flex items-center gap-2 hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-600 transition-all text-lg"
         >
           {cta}
           <ArrowRightIcon className="w-6 h-6" />
-        </a>
+        </Link>
       </div>
     </MainContent>
   );
