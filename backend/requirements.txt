@@ -5,3 +5,7 @@ uvicorn[standard]==0.34.3
 python-multipart==0.0.20
 selenium
 webdriver-manager
+firebase-admin
+google-cloud-firestore
+google-auth
+google-api-python-client

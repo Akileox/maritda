@@ -224,3 +224,15 @@ async def create_translation(
 ---
 
 **이 README는 PR/협업/리뷰용으로, 실제 코드와 연동되는 주요 구조와 예제만을 간결하게 정리한 버전입니다.**
+
+---
+
+## ⚠️ 배포/운영 주의사항 (필수 체크리스트)
+
+- **requirements.txt(파이썬 패키지) 변경 시**: 반드시 커밋/푸시해야 Render 등 배포 환경에 반영됩니다.
+- **Firebase/Firebase Auth/Firestore/Google API 등 외부 서비스 연동 시**: 관련 패키지(`firebase-admin`, `google-cloud-firestore`, `google-auth`, `google-api-python-client` 등)가 requirements.txt에 누락되지 않았는지 항상 확인하세요.
+- **패키지 추가/업데이트 후**: Render(또는 기타 배포 환경)에서 빌드/배포가 정상적으로 완료되는지 꼭 확인하세요.
+- **환경변수, 서비스 계정 키 등 민감정보**: .gitignore에 반드시 포함, 커밋/푸시 금지!
+- **CORS, 도메인, API 경로 등**: 프론트/백엔드 배포 주소가 바뀌면 CORS 허용 origins, 환경변수 등도 함께 수정해야 합니다.
+
+---
