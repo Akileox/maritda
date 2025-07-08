@@ -20,8 +20,9 @@ origins = [
     "http://127.0.0.1:3000",
     "http://127.0.0.1:8080",
     "http://127.0.0.1:5176",
-    # 배포 환경 (예시)
-    # "https://maritda-app.vercel.app",
+    # 배포 환경 (Vercel 프론트엔드 주소 추가)
+    "https://maritda.vercel.app",
+    # 필요시 커스텀 도메인도 추가
     # "https://your-custom-domain.com",
 ]
 
