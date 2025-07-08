@@ -4,11 +4,10 @@ from fastapi import Depends, HTTPException, status, Request
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 import os
 
-# Firebase Admin SDK 초기화 (최초 1회만)
-if not firebase_admin._apps:
-    cred_path = os.environ.get("FIREBASE_CREDENTIAL_PATH", "firebase-adminsdk.json")
-    cred = credentials.Certificate(cred_path)
-    firebase_admin.initialize_app(cred)
+# 환경변수에서 경로를 읽고, 없으면 기본값 사용
+cred_path = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS", "/etc/secrets/firebase-adminsdk.json")
+cred = credentials.Certificate(cred_path)
+firebase_admin.initialize_app(cred)
 
 security = HTTPBearer()
 
