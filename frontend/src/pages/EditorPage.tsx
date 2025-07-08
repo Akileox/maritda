@@ -65,7 +65,7 @@ const EditorPage = () => {
         const token = await user.getIdToken();
         headers["Authorization"] = `Bearer ${token}`;
       }
-      const res = await fetch('http://localhost:8000/api/v1/translate', {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v1/translate`, {
         method: 'POST',
         body: formData,
         headers,
