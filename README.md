@@ -234,5 +234,6 @@ async def create_translation(
 - **패키지 추가/업데이트 후**: Render(또는 기타 배포 환경)에서 빌드/배포가 정상적으로 완료되는지 꼭 확인하세요.
 - **환경변수, 서비스 계정 키 등 민감정보**: .gitignore에 반드시 포함, 커밋/푸시 금지!
 - **CORS, 도메인, API 경로 등**: 프론트/백엔드 배포 주소가 바뀌면 CORS 허용 origins, 환경변수 등도 함께 수정해야 합니다.
+- **Firebase 서비스 계정 키 파일(firebase-adminsdk.json)**: 배포 환경(Render 등)에서는 반드시 Secret File로 등록하고, 코드에서 환경변수(`GOOGLE_APPLICATION_CREDENTIALS`) 또는 기본 경로(`/etc/secrets/firebase-adminsdk.json`)로 지정해야 합니다. (git에는 절대 포함하지 말 것)
 
 ---
