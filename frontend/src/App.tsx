@@ -30,7 +30,7 @@ export const LanguageContext = createContext<LanguageContextType>({ lang: 'ko', 
 export const ThemeContext = createContext<ThemeContextType>({ theme: 'light', setTheme: () => {} });
 
 function App() {
-  const [lang, setLang] = useState<'ko' | 'en'>('ko');
+  const [lang, setLang] = useState<'ko' | 'en'>('en');
   const [theme, setTheme] = useState<'light' | 'dark'>(() => (localStorage.getItem('theme') as 'light' | 'dark') || 'light');
   const user = useAuth();
 
