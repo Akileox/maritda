@@ -90,3 +90,137 @@ maritda/
 ├── Dockerfile     # 배포용 Dockerfile
 └── README.md
 \`\`\`
+
+---
+
+# 실전 개발/운영/배포/코드 예시 (PR/협업/리뷰용)
+
+## 주요 기술 스택
+
+- **프론트엔드:** React (Vite, TypeScript, TailwindCSS)
+- **백엔드:** FastAPI (Python)
+- **인증:** Firebase Authentication (Google, Github 등 소셜 로그인)
+- **DB:** Firestore (사용자 정보)
+- **배포:** Vercel(프론트), Render(백엔드)
+- **CI/CD:** 환경변수 자동화, gitignore, 보안, 실전 배포
+
+## 환경변수 예시 (.env.example)
+
+```env
+# 프론트엔드 (frontend/.env.example)
+VITE_API_BASE_URL=your_api_base_url
+```
+- 실제 배포 시 Vercel 환경변수에 `VITE_API_BASE_URL=https://maritda-backend.onrender.com` 추가 필요
+
+## 프론트엔드 예제: 자막 번역 파이프라인
+
+```tsx
+// EditorPage.tsx (일부)
+const handleTranslate = async () => {
+  if (!file) return;
+  setLoading(true);
+  setError('');
+  setResult('');
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('source_lang', LANGUAGE_CODES[sourceLang]);
+    formData.append('dest_lang', LANGUAGE_CODES[targetLang]);
+    let headers: Record<string, string> = {};
+    if (user) {
+      const token = await user.getIdToken();
+      headers["Authorization"] = `Bearer ${token}`;
+    }
+    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v1/translate`, {
+      method: 'POST',
+      body: formData,
+      headers,
+    });
+    if (!res.ok) throw new Error('API Error');
+    const data = await res.json();
+    setResult(data.translated_content);
+  } catch (e) {
+    setError('번역 중 오류가 발생했습니다.');
+  } finally {
+    setLoading(false);
+  }
+};
+```
+
+## 백엔드 예제: FastAPI 번역 엔드포인트
+
+```python
+# backend/app/main.py (일부)
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from app.api import translate
+
+app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[...],  # Vercel/로컬 모두 허용
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+app.include_router(translate.router, prefix="/api/v1")
+```
+
+```python
+# backend/app/api/translate.py (일부)
+@router.post("/translate")
+async def create_translation(
+    file: UploadFile = File(...),
+    source_lang: str = Form(...),
+    dest_lang: str = Form(...),
+    user=Depends(verify_firebase_token)
+):
+    # 파일 확장자/용량/MIME 검증
+    # 번역 서비스 호출
+    translated_text = translator_service.translate_subtitle(
+        file=file,
+        source_lang=source_lang,
+        dest_lang=dest_lang
+    )
+    return {"translated_content": translated_text}
+```
+
+## 인증/보안
+
+- **Firebase Auth**로 소셜 로그인(구글, 깃허브 등) 및 JWT 토큰 검증
+- FastAPI에서 토큰 미들웨어로 보호
+- Firestore에 사용자 정보/권한 저장
+
+## 배포/운영
+
+- **Vercel**: 프론트엔드 배포, 환경변수로 백엔드 주소 관리
+- **Render**: 백엔드 배포, CORS/보안 설정
+- **.env, .env.production** 등은 gitignore로 보호, 민감정보 push protection 적용
+
+## 실행 방법
+
+1. **백엔드 실행**
+   ```sh
+   cd backend
+   uvicorn app.main:app --reload
+   ```
+
+2. **프론트엔드 실행**
+   ```sh
+   cd frontend
+   npm install
+   npm run dev
+   ```
+
+3. **환경변수 세팅**
+   - `.env` 파일에 `VITE_API_BASE_URL` 지정
+   - Vercel 환경변수에도 동일하게 추가
+
+## 기타
+
+- robust 예외처리, 로깅, 테스트 코드, UI/UX 개선, 다크모드, 어드민, git 보안 등 실전 운영 노하우 반영
+- 자세한 내용은 코드/커밋/PR을 참고
+
+---
+
+**이 README는 PR/협업/리뷰용으로, 실제 코드와 연동되는 주요 구조와 예제만을 간결하게 정리한 버전입니다.**

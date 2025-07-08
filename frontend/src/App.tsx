@@ -12,6 +12,10 @@ import ContactPage from './pages/ContactPage';
 import NotFoundPage from './pages/NotFoundPage';
 import TermsPage from './pages/TermsPage';
 import PrivacyPage from './pages/PrivacyPage';
+import { auth } from "./firebase";
+import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+import useAuth from "./hooks/useAuth";
+import AdminPage from './pages/AdminPage';
 
 interface LanguageContextType {
   lang: 'ko' | 'en';
@@ -28,15 +32,36 @@ export const ThemeContext = createContext<ThemeContextType>({ theme: 'light', se
 function App() {
   const [lang, setLang] = useState<'ko' | 'en'>('ko');
   const [theme, setTheme] = useState<'light' | 'dark'>(() => (localStorage.getItem('theme') as 'light' | 'dark') || 'light');
+  const user = useAuth();
 
   useEffect(() => {
+    const root = document.documentElement;
     if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
+      root.classList.add('dark');
+      root.classList.remove('light');
     } else {
-      document.documentElement.classList.remove('dark');
+      root.classList.remove('dark');
+      root.classList.add('light');
     }
     localStorage.setItem('theme', theme);
   }, [theme]);
+
+  const handleLogin = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      await signInWithPopup(auth, provider);
+    } catch (error) {
+      alert("로그인 실패: " + error);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+    } catch (error) {
+      alert("로그아웃 실패: " + error);
+    }
+  };
 
   return (
     <LanguageContext.Provider value={{ lang, setLang }}>
@@ -53,6 +78,7 @@ function App() {
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/terms" element={<TermsPage />} />
               <Route path="/privacy" element={<PrivacyPage />} />
+              <Route path="/admin" element={<AdminPage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </Layout>

@@ -3,6 +3,7 @@ import MainContent from '../components/MainContent';
 import { CloudArrowUpIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { LanguageContext } from '../App';
 import { useContext } from 'react';
+import useAuth from "../hooks/useAuth";
 
 const LANGUAGES = ['한국어', '영어', '일본어', '중국어'];
 const LANGUAGE_CODES = { '한국어': 'ko', '영어': 'en', '일본어': 'ja', '중국어': 'zh' };
@@ -17,6 +18,7 @@ const EditorPage = () => {
   const [result, setResult] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const user = useAuth();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -58,9 +60,15 @@ const EditorPage = () => {
       formData.append('file', file);
       formData.append('source_lang', LANGUAGE_CODES[sourceLang as keyof typeof LANGUAGE_CODES]);
       formData.append('dest_lang', LANGUAGE_CODES[targetLang as keyof typeof LANGUAGE_CODES]);
-      const res = await fetch('http://localhost:8000/api/v1/translate', {
+      let headers: Record<string, string> = {};
+      if (user) {
+        const token = await user.getIdToken();
+        headers["Authorization"] = `Bearer ${token}`;
+      }
+      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v1/translate`, {
         method: 'POST',
         body: formData,
+        headers,
       });
       if (!res.ok) throw new Error('API Error');
       const data = await res.json();
